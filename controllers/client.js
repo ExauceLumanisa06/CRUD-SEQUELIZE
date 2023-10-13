@@ -1,4 +1,6 @@
 const Client = require("../model/client")
+const Produit = require("../model/produit")
+const Vendre = require("../model/vendre")
 
 exports.createClient = (req, res) => {
     //reception body
@@ -52,7 +54,14 @@ exports.getAllClient = function (req, res) {
 exports.getOneClient = (req, res) => {
 
     try {
-        Client.findByPk(req.params.cli_id)
+        Client.findByPk(req.params.cli_id,{include:[
+            {
+                model:Vendre,
+                include:[
+                   { model:Produit}
+                ]
+            }
+        ]})
             .then((client) => {
                 if (!client) return res.status(404).send("client non troué")
                 else return res.status(200).json({ client })
