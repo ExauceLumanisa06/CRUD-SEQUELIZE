@@ -1,0 +1,1 @@
+*créer un fichier .env en se basant sur .env.example
