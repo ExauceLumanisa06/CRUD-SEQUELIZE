@@ -27,6 +27,7 @@ exports.createProduit = (req, res) => {
 }
 
 exports.getAllProduit = (req, res) => {
+
     try {
         Produit.findAll()
             .then((produits) => {
@@ -41,6 +42,25 @@ exports.getAllProduit = (req, res) => {
 }
 exports.getOneProduit = (req, res) => {
 
+    try {
+        Produit.findByPk(req.params.pro_id,{include:[
+            {
+                model:Vendre,
+                include:[
+                   { model:Client}
+                ]
+            }
+        ]})
+        .then((produit) => {
+            if (!produit) return res.status(404).send("produit non trouvé")
+            else return res.status(200).json({ produit })
+        })
+        .catch()
+        
+    } catch (error) {
+        res.json(error)
+        
+    }
 }
 exports.updateProduit = (req, res) => {
 
