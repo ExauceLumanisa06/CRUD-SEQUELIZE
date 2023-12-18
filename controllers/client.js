@@ -63,7 +63,7 @@ exports.getOneClient = (req, res) => {
             }
         ]})
             .then((client) => {
-                if (!client) return res.status(404).send("client non troué")
+                if (!client) return res.status(404).send("client non trouvé")
                 else return res.status(200).json({ client })
             })
             .catch()

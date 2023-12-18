@@ -6,6 +6,7 @@ require("./config/db").sync()
 const clientRouter = require("./routes/client")
 const produitRouter = require("./routes/produit")
 const vendreRouter = require("./routes/vendre")
+const userRouter = require("./routes/user")
 
 // Configuration du port du serveur 
 var port = process.env.PORT || 8090;
@@ -18,6 +19,7 @@ app.use(express.json())
 app.use("/client",clientRouter)
 app.use("/produit",produitRouter)
 app.use("/vendre",vendreRouter)
+app.use("/auth",userRouter)
 app.listen(port, function () {
     console.log(`server running on ${port}`);
 }); 

@@ -1,4 +1,6 @@
+const Client = require("../model/client")
 const Produit = require("../model/produit")
+const Vendre = require("../model/vendre")
 
 exports.createProduit = (req, res) => {
     //reception body
@@ -41,9 +43,8 @@ exports.getAllProduit = (req, res) => {
     }
 }
 exports.getOneProduit = (req, res) => {
-
     try {
-        Produit.findByPk(req.params.pro_id,{include:[
+        Client.findByPk(req.params.prod_id,{include:[
             {
                 model:Vendre,
                 include:[
@@ -51,20 +52,41 @@ exports.getOneProduit = (req, res) => {
                 ]
             }
         ]})
-        .then((produit) => {
-            if (!produit) return res.status(404).send("produit non trouvé")
-            else return res.status(200).json({ produit })
-        })
-        .catch()
-        
+            .then((produit) => {
+                if (!produit) return res.status(404).send("produit non trouvé")
+                else return res.status(200).json({ produit })
+            })
+            .catch()
+
     } catch (error) {
         res.json(error)
-        
     }
 }
 exports.updateProduit = (req, res) => {
+    const { pro_libelle, pro_prix } = req.body
+    try {
+        Produit.update({ pro_libelle: pro_libelle, pro_prix: pro_prix }, { where: { prod_id: req.params.prod_id } })
+            .then((msg) => {
+                if (msg[0] < 1) return res.send('modification non effectuée')
+                else return res.send("modification reussie !")
+            })
+            .catch()
 
+    } catch (error) {
+        res.json(error)
+    }
 }
 exports.deleteProduit = (req, res) => {
+    try {
+        Produit.destroy({ where: { prod_id: req.params.prod_id } })
+            .then((msg) => {
+                if (msg < 1) return res.send('suppression non effectuée')
+                else return res.send("suppression reussie !")
+            })
+            .catch()
+
+    } catch (error) {
+        res.json(error)
+    }
 
 }
